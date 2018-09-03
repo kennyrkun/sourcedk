@@ -73,7 +73,7 @@ const int borderWidth(8);
 const int titlebarHeight(31 - borderWidth);
 const int BOTTOM = 80;
 
-sf::RectangleShape titlebar,
+sf::RectangleShape t, titlebar,
 	top,
 	topUpper, topLower,
 	left,
@@ -85,16 +85,17 @@ sf::RectangleShape titlebar,
 
 sf::RectangleShape gameTypeShape;
 
-sf::Vector2f windowSize = { 310, 490 };
-sf::Vector2f useableWindowSize = { windowSize.x - (borderWidth * 2), windowSize.y - (borderWidth * 2) - titlebarHeight };
+sf::RectangleShape lowerBorderExtension;
 
 sf::Text title;
+sf::Vector2f windowSize = { 310, 470 };
+sf::Vector2f useableWindowSize = { windowSize.x - (borderWidth * 2), windowSize.y - (borderWidth * 2) - titlebarHeight };
 
-sf::Color WHITE_BORDER = SFUI::Theme::hexToRgb("#889180");
-sf::Color BLACK_BORDER = SFUI::Theme::hexToRgb("#282E22");
+sf::Color WHITE_BORDER(136,145,128);
+sf::Color BLACK_BORDER(40,46,34);
 
-sf::Color BORDER = SFUI::Theme::hexToRgb("#4C5844");
-sf::Color WINDOW_BACKGROUND = SFUI::Theme::hexToRgb("#3E4637");
+sf::Color WINDOW_BACKGROUND(62, 70, 55);
+sf::Color BORDER(76, 88, 68);
 
 void updateWindowDecorations()
 {
@@ -103,7 +104,7 @@ void updateWindowDecorations()
 	title.setCharacterSize(16);
 	title.setPosition(sf::Vector2f(borderWidth, (borderWidth / 2)));
 
-	titlebar.setSize(sf::Vector2f(windowSize.x - borderWidth, titlebarHeight));
+	titlebar.setSize(sf::Vector2f(windowSize.x - borderWidth * 2, titlebarHeight));
 	titlebar.setPosition(sf::Vector2f(borderWidth, borderWidth));
 
 	top.setSize(sf::Vector2f(windowSize.x, borderWidth));
@@ -130,7 +131,7 @@ void updateWindowDecorations()
 	rightRightBorder.setPosition(sf::Vector2f(windowSize.x - 1, 0));
 
 	bottom.setSize(sf::Vector2f(windowSize.x + (borderWidth * 2), borderWidth));
-	bottom.move(sf::Vector2f(0, windowSize.y - borderWidth));
+	bottom.setPosition(sf::Vector2f(0, windowSize.y - borderWidth));
 
 	bottomUpperBorder.setSize(sf::Vector2f(windowSize.x - (borderWidth * 2) + 2, 1));
 	bottomUpperBorder.setPosition(sf::Vector2f(borderWidth - 1, windowSize.y - BOTTOM));
@@ -138,14 +139,21 @@ void updateWindowDecorations()
 	bottomLowerBorder.setSize(sf::Vector2f(windowSize.x + (borderWidth * 2), 1));
 	bottomLowerBorder.setPosition(sf::Vector2f(0, windowSize.y - 1));
 
-	gameTypeShape.setSize(sf::Vector2f(windowSize.x - (borderWidth * 2), BOTTOM));
-	gameTypeShape.setPosition(sf::Vector2f(borderWidth, windowSize.y - BOTTOM));
+	lowerBorderExtension.setSize(sf::Vector2f(windowSize.x - (borderWidth * 2), BOTTOM));
+	lowerBorderExtension.setPosition(sf::Vector2f(borderWidth, windowSize.y - BOTTOM));
 }
 
 int main()
 {
 	enum CALLBACKS
 	{
+		OPEN_HAMMER,
+		OPEN_MODEL_VIEWER,
+		OPEN_FACE_POSER,
+		OPEN_ITEM_TEST,
+
+		OPEN_SDK_DOCUMENTATION,
+
 		MINIMISE,
 		QUIT
 	};
@@ -159,10 +167,8 @@ int main()
 	SFUI::Theme::input.textColor = sf::Color::White;
 	SFUI::Theme::input.textColorHover = sf::Color::White;
 	SFUI::Theme::input.textColorFocus = sf::Color::White;
-	SFUI::Theme::windowBgColor = SFUI::Theme::hexToRgb("#3E4637");
+	SFUI::Theme::windowBgColor = WINDOW_BACKGROUND;
 	SFUI::Theme::PADDING = 2.f;
-
-	// TODO: borders are totalling to 9 
 
 	titlebar.setFillColor(BORDER);
 	top.setFillColor(BORDER);
@@ -177,20 +183,22 @@ int main()
 	bottom.setFillColor(BORDER);
 	bottomUpperBorder.setFillColor(WHITE_BORDER);
 	bottomLowerBorder.setFillColor(BLACK_BORDER);
-	gameTypeShape.setFillColor(BORDER);
+	lowerBorderExtension.setFillColor(BORDER);
 
 	updateWindowDecorations();
 
+
+#pragma region interface
 //	useableWindowSize.x += borderWidth * 2;
 //	useableWindowSize.y += (borderWidth * 2) + titlebarHeight;
 
 	// Create the main window
-	sf::RenderWindow window(sf::VideoMode(640, 480), "SFUI 2", sf::Style::None);
+	sf::RenderWindow window(sf::VideoMode(windowSize.x, windowSize.y), title.getString(), sf::Style::None);
 //	sf::RenderWindow window(sf::VideoMode(windowSize.x, windowSize.y), title.getString(), sf::Style::None);
 	window.setVerticalSyncEnabled(true);
 
 	SFUI::Menu menu(window);
-	menu.setPosition(sf::Vector2f(borderWidth + 10, borderWidth + titlebarHeight + 10));
+	menu.setPosition(sf::Vector2f(borderWidth + 10, borderWidth + titlebarHeight + 8));
 
 	menu.addLabel("Applications");
 	menu.addButton("Hammer Editor");
@@ -206,6 +214,12 @@ int main()
 	menu.addButton("Reset Game Configurations");
 	menu.addButton("Edit Game Configurations");
 
+	// padding
+	menu.addHorizontalBoxLayout();
+	menu.addHorizontalBoxLayout();
+	menu.addHorizontalBoxLayout();
+	menu.addHorizontalBoxLayout();
+
 	SFUI::FormLayout* form2 = menu.addFormLayout();
 
 	enum class Engine
@@ -219,7 +233,9 @@ int main()
 		Source2,
 	};
 
-	SFUI::ComboBox<Engine>* engineVersion = new SFUI::ComboBox<Engine>(&window);
+//	SFUI::ComboBox<Engine>* engineVersion = new SFUI::ComboBox<Engine>(&window);
+	// We can't use ComboBox right now because SFUI isn't very great.
+	SFUI::OptionsBox<Engine>* engineVersion = new SFUI::OptionsBox<Engine>;
 	engineVersion->addItem("GoldSrc", Engine::Gold);
 	engineVersion->addItem("2003", Engine::Source2003);
 	engineVersion->addItem("2006", Engine::Source2006);
@@ -256,7 +272,8 @@ int main()
 		RICOCHET,
 	};
 
-	SFUI::ComboBox<Game>* gameCombo = new SFUI::ComboBox<Game>(&window);
+//	SFUI::ComboBox<Game>* gameCombo = new SFUI::ComboBox<Game>(&window);
+	SFUI::OptionsBox<Game>* gameCombo = new SFUI::OptionsBox<Game>;
 	gameCombo->addItem("Counter-Strike: Global Offensive", Game::CSGO);
 	gameCombo->addItem("Counter-Strike: Source", Game::CSS);
 	gameCombo->addItem("Counter-Strike", Game::CS);
@@ -310,6 +327,7 @@ int main()
 	sf::Vector2u lastWindowSize;
 	sf::Vector2u lastWindowSize2;
 	int dragOffset;
+#pragma endregion
 
 	// Start the game loop
 	while (window.isOpen())
@@ -481,6 +499,10 @@ int main()
 			int isd = closeMenu.onEvent(event);
 			switch (isd)
 			{
+			case CALLBACKS::OPEN_SDK_DOCUMENTATION:
+				system("start https ://developer.valvesoftware.com/wiki/Main_Page");
+				break;
+
 			case CALLBACKS::QUIT:
 				if (mouseOverCloseButton)
 					window.close();
@@ -494,6 +516,7 @@ int main()
 		window.clear(SFUI::Theme::windowBgColor);
 
 		window.draw(gameTypeShape);
+		window.draw(lowerBorderExtension);
 
 		window.draw(menu);
 
@@ -516,6 +539,8 @@ int main()
 		window.draw(bottomLowerBorder);
 
 		window.draw(closeMenu);
+
+		window.draw(t);
 
 		window.display();
 	}
