@@ -18,5 +18,11 @@
     <ClInclude Include="Windows.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="Games.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

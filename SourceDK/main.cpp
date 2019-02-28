@@ -4,6 +4,8 @@
 #include <SFUI/Theme.hpp>
 
 #include "Windows.hpp"
+#include "Games.hpp"
+#include "Engine.hpp"
 
 /*
 class CustomBorderWindow : public sf::Window, public sf::RenderTarget
@@ -88,7 +90,7 @@ public:
 		delete closeMenu;
 	}
 
-	sf::RenderWindow& createWindow(sf::Vector2f size = { 310, 500 })
+	sf::RenderWindow& createWindow(sf::Vector2f size = { 310, 500 }, std::string title_ = "Source SDK")
 	{
 		windowSize = size;
 		useableWindowSize = { windowSize.x - (borderWidth * 2), windowSize.y - (borderWidth * 2) - titlebarHeight };
@@ -101,15 +103,15 @@ public:
 		SFUI::HorizontalBoxLayout* closehbox = closeMenu->addHorizontalBoxLayout();
 
 		minimiseButtonTexture.loadFromFile("resources/interface/minimise.png");
-		SFUI::SpriteButton* minimiseButton = new SFUI::SpriteButton(minimiseButtonTexture);
+		minimiseButton = new SFUI::SpriteButton(minimiseButtonTexture);
 		closehbox->add(minimiseButton, DECO_CALLBACK::MINIMISED);
 
 		maximiseButtonTexture.loadFromFile("resources/interface/maximise.png");
-		SFUI::SpriteButton* maximiseButton = new SFUI::SpriteButton(maximiseButtonTexture);
+		maximiseButton = new SFUI::SpriteButton(maximiseButtonTexture);
 		closehbox->add(maximiseButton, DECO_CALLBACK::MAXIMISED);
 
 		closeButtonTexture.loadFromFile("resources/interface/close.png");
-		SFUI::SpriteButton* closeButton = new SFUI::SpriteButton(closeButtonTexture);
+		closeButton = new SFUI::SpriteButton(closeButtonTexture);
 		closehbox->add(closeButton, DECO_CALLBACK::CLOSED);
 
 		closeMenu->setPosition(sf::Vector2f(windowSize.x - closeMenu->getSize().x - borderWidth, borderWidth - 2));
@@ -474,45 +476,6 @@ private:
 	};
 };
 
-enum Engine
-{
-	Gold,
-	Source2003,
-	Source2006,
-	Source2007,
-	Source2009,
-	Source2013,
-	Source2,
-};
-
-// TODO: retrieve this list from Valve servers.
-enum Game
-{
-	CSGO,
-	CSS,
-	CS,
-
-	HL,
-	HLS,
-	HLOS,
-	HLBS,
-	HLDM, // Deathmatch Classic
-	HLDMS,
-
-	HL2,
-	HL2E1,
-	HL2E2,
-	HL2LC,
-	HL2DM,
-
-	DOTA2,
-	TF2,
-	L4D,
-	L4D2,
-
-	RICOCHET,
-};
-
 enum CALLBACKS
 {
 	OPEN_HAMMER,
@@ -521,6 +484,7 @@ enum CALLBACKS
 	OPEN_ITEM_TEST,
 
 	OPEN_SDK_DOCUMENTATION,
+	OPEN_SDK_RELEASE_NOTES,
 
 	APPLICATION_SETTINGS,
 
@@ -536,14 +500,17 @@ void buildHomeInterface(SFUI::Menu& menu)
 	menu.addButton("Model Viewer", OPEN_MODEL_VIEWER);
 	menu.addButton("Face Poser", OPEN_FACE_POSER);
 	menu.addButton("itemtest", OPEN_ITEM_TEST);
+
 	menu.addLabel("Documentation");
-	menu.addButton("SDK Release Notes");
+	menu.addButton("SDK Release Notes", OPEN_SDK_RELEASE_NOTES);
 	menu.addButton("SDK Documentation", OPEN_SDK_DOCUMENTATION);
+
 	menu.addLabel("Utilities");
 	menu.addButton("Create a Mod");
 	menu.addButton("Refresh SDK Content");
 	menu.addButton("Reset Game Configurations");
 	menu.addButton("Edit Game Configurations");
+
 	menu.addHorizontalBoxLayout();
 	menu.addButton("Application Settings", APPLICATION_SETTINGS);
 
@@ -554,7 +521,7 @@ void buildHomeInterface(SFUI::Menu& menu)
 
 	SFUI::FormLayout* form2 = menu.addFormLayout();
 
-	//	SFUI::ComboBox<Engine>* engineVersion = new SFUI::ComboBox<Engine>(&window);
+//	SFUI::ComboBox<Engine>* engineVersion = new SFUI::ComboBox<Engine>(&window);
 	// We can't use ComboBox right now because SFUI isn't very great.
 	SFUI::OptionsBox<Engine>* engineVersion = new SFUI::OptionsBox<Engine>;
 	engineVersion->addItem("GoldSrc", Engine::Gold);
@@ -566,9 +533,7 @@ void buildHomeInterface(SFUI::Menu& menu)
 	engineVersion->addItem("Source2", Engine::Source2);
 	form2->addRow("Engine: ", engineVersion, 1336);
 
-
-
-	//	SFUI::ComboBox<Game>* gameCombo = new SFUI::ComboBox<Game>(&window);
+//	SFUI::ComboBox<Game>* gameCombo = new SFUI::ComboBox<Game>(&window);
 	SFUI::OptionsBox<Game>* gameCombo = new SFUI::OptionsBox<Game>;
 	gameCombo->addItem("Counter-Strike: Global Offensive", Game::CSGO);
 	gameCombo->addItem("Counter-Strike: Source", Game::CSS);
@@ -617,63 +582,7 @@ int main()
 	SFUI::Menu menu(window);
 	menu.setPosition(sf::Vector2f(borderWidth + 10, borderWidth + titlebarHeight + 8));
 
-	menu.addLabel("Applications");
-	menu.addButton("Hammer Editor", OPEN_HAMMER);
-	menu.addButton("Model Viewer", OPEN_MODEL_VIEWER);
-	menu.addButton("Face Poser", OPEN_FACE_POSER);
-	menu.addButton("itemtest", OPEN_ITEM_TEST);
-	menu.addLabel("Documentation");
-	menu.addButton("SDK Release Notes");
-	menu.addButton("SDK Documentation", OPEN_SDK_DOCUMENTATION);
-	menu.addLabel("Utilities");
-	menu.addButton("Create a Mod");
-	menu.addButton("Refresh SDK Content");
-	menu.addButton("Reset Game Configurations");
-	menu.addButton("Edit Game Configurations");
-	menu.addHorizontalBoxLayout();
-	menu.addButton("Application Settings", APPLICATION_SETTINGS);
-
-	// padding
-	menu.addHorizontalBoxLayout();
-	menu.addHorizontalBoxLayout();
-	menu.addHorizontalBoxLayout();
-
-	SFUI::FormLayout* form2 = menu.addFormLayout();
-
-//	SFUI::ComboBox<Engine>* engineVersion = new SFUI::ComboBox<Engine>(&window);
-	// We can't use ComboBox right now because SFUI isn't very great.
-	SFUI::OptionsBox<Engine>* engineVersion = new SFUI::OptionsBox<Engine>;
-	engineVersion->addItem("GoldSrc", Engine::Gold);
-	engineVersion->addItem("2003", Engine::Source2003);
-	engineVersion->addItem("2006", Engine::Source2006);
-	engineVersion->addItem("2007", Engine::Source2007);
-	engineVersion->addItem("2009", Engine::Source2009);
-	engineVersion->addItem("2013", Engine::Source2013);
-	engineVersion->addItem("Source2", Engine::Source2);
-	form2->addRow("Engine: ", engineVersion, 1336);
-
-//	SFUI::ComboBox<Game>* gameCombo = new SFUI::ComboBox<Game>(&window);
-	SFUI::OptionsBox<Game>* gameCombo = new SFUI::OptionsBox<Game>;
-	gameCombo->addItem("Counter-Strike: Global Offensive", Game::CSGO);
-	gameCombo->addItem("Counter-Strike: Source", Game::CSS);
-	gameCombo->addItem("Counter-Strike", Game::CS);
-	gameCombo->addItem("Half-Life", Game::HL);
-	gameCombo->addItem("Half-Life: Source", Game::HLS);
-	gameCombo->addItem("Half-Life: Opposing Force", Game::HLOS);
-	gameCombo->addItem("Half-Life: Blue Shift", Game::HLBS);
-	gameCombo->addItem("Half-Life: Deathmatch", Game::HLDM);
-	gameCombo->addItem("Half-Life: Deathmatch: Source", Game::HLDMS);
-	gameCombo->addItem("Half-Life 2", Game::HL2);
-	gameCombo->addItem("Half-Life 2: Episode 1", Game::HL2E1);
-	gameCombo->addItem("Half-Life 2: Episode 2", Game::HL2E2);
-	gameCombo->addItem("Half-Life 2: Lost Coast", Game::HL2LC);
-	gameCombo->addItem("Half-Life 2: Deathmatch", Game::HL2DM);
-	gameCombo->addItem("Dota 2", Game::DOTA2);
-	gameCombo->addItem("Team Fortress 2", Game::TF2);
-	gameCombo->addItem("Left 4 Dead", Game::L4D);
-	gameCombo->addItem("Left 4 Dead 2", Game::L4D2);
-	gameCombo->addItem("Ricochet", Game::RICOCHET);
-	form2->addRow("Game: ", gameCombo, 1337);
+	buildHomeInterface(menu);
 #pragma endregion
 
 	sf::RectangleShape background;
@@ -698,6 +607,9 @@ int main()
 			int id = menu.onEvent(event);
 			switch (id)
 			{
+			case CALLBACKS::OPEN_SDK_RELEASE_NOTES:
+				system("start https://developer.valvesoftware.com/wiki/Source_SDK_Release_Notes");
+				break;
 			case CALLBACKS::OPEN_SDK_DOCUMENTATION:
 				system("start https://developer.valvesoftware.com/wiki/Main_Page");
 				break;
