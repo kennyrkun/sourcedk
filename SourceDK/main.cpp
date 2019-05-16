@@ -106,9 +106,12 @@ public:
 		minimiseButton = new SFUI::SpriteButton(minimiseButtonTexture);
 		closehbox->add(minimiseButton, DECO_CALLBACK::MINIMISED);
 
+		/*
+		// does this application really need to be maximised?
 		maximiseButtonTexture.loadFromFile("resources/interface/maximise.png");
 		maximiseButton = new SFUI::SpriteButton(maximiseButtonTexture);
 		closehbox->add(maximiseButton, DECO_CALLBACK::MAXIMISED);
+		*/
 
 		closeButtonTexture.loadFromFile("resources/interface/close.png");
 		closeButton = new SFUI::SpriteButton(closeButtonTexture);
@@ -603,6 +606,11 @@ int main()
 			{
 				window.close();
 			}
+			else if (event.type == sf::Event::EventType::Resized)
+			{
+				background.setSize(sf::Vector2f(event.size.width - (borderWidth * 2), background.getSize().y));
+				background.setPosition(decorations.bottom.getPosition() - sf::Vector2f(-borderWidth, background.getSize().y));
+			}
 
 			int id = menu.onEvent(event);
 			switch (id)
@@ -618,9 +626,9 @@ int main()
 
 		window.clear(SFUI::Theme::windowBgColor);
 
-		decorations.Draw();
-
 		window.draw(background);
+
+		decorations.Draw();
 
 		window.draw(menu);
 
