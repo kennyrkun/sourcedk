@@ -135,6 +135,10 @@ public:
 		bottomUpperBorder.setFillColor(WHITE_BORDER);
 		bottomLowerBorder.setFillColor(BLACK_BORDER);
 
+		title.setString(title_);
+		title.setFont(SFUI::Theme::getFont());
+		title.setCharacterSize(16);
+
 		updateWindowDecorations();
 
 		return window;
@@ -192,6 +196,8 @@ public:
 
 	void HandleEvent(sf::Event& event)
 	{
+		// TODO: don't run all the resizing code if the window is not resizable
+
 		if (event.type == sf::Event::EventType::Resized)
 		{
 			sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
@@ -429,9 +435,6 @@ public:
 
 	void updateWindowDecorations()
 	{
-		title.setString("Source SDK");
-		title.setFont(SFUI::Theme::getFont());
-		title.setCharacterSize(16);
 		title.setPosition(sf::Vector2f(borderWidth, (borderWidth / 2)));
 
 		titlebar.setSize(sf::Vector2f(windowSize.x - borderWidth * 2, titlebarHeight));
@@ -489,6 +492,7 @@ enum CALLBACKS
 	OPEN_ITEM_TEST,
 
 	OPEN_SDK_DOCUMENTATION,
+	OPEN_SDK_DOCUMENTATION_VALVE,
 	OPEN_SDK_RELEASE_NOTES,
 	OPEN_SDK_RELEASE_NOTES_VALVE,
 
@@ -506,6 +510,7 @@ void buildHomeInterface(SFUI::Menu& menu)
 {
 	menu.setPosition(sf::Vector2f(borderWidth + 10, borderWidth + titlebarHeight + 8));
 
+	// TODO: allow this to be customised with settings
 	menu.addLabel("Applications");
 	menu.add(new DisabledButton("Hammer Editor"), OPEN_HAMMER);
 	menu.add(new DisabledButton("Model Viewer"), OPEN_MODEL_VIEWER);
@@ -513,8 +518,12 @@ void buildHomeInterface(SFUI::Menu& menu)
 	menu.add(new DisabledButton("itemtest"), OPEN_ITEM_TEST);
 
 	menu.addLabel("Documentation");
-	menu.addButton("SDK Release Notes", OPEN_SDK_RELEASE_NOTES);
-	menu.addButton("SDK Documentation", OPEN_SDK_DOCUMENTATION);
+	SFUI::HorizontalBoxLayout* hbox1 = menu.addHorizontalBoxLayout();
+	hbox1->addButton("SDK Release Notes", OPEN_SDK_RELEASE_NOTES);
+	hbox1->addButton("Valve", OPEN_SDK_RELEASE_NOTES_VALVE);
+	SFUI::HorizontalBoxLayout* hbox2 = menu.addHorizontalBoxLayout();
+	hbox2->addButton("SDK Documentation", OPEN_SDK_DOCUMENTATION);
+	hbox2->addButton("Valve", OPEN_SDK_DOCUMENTATION_VALVE);
 
 	menu.addLabel("Utilities");
 	menu.add(new DisabledButton("Create a Mod"), CREATE_A_MOD);
@@ -624,9 +633,15 @@ int main()
 			switch (id)
 			{
 			case CALLBACKS::OPEN_SDK_RELEASE_NOTES:
+				system("start https://github.com/kennyrkun/sourcedk/releases");
+				break;
+			case CALLBACKS::OPEN_SDK_RELEASE_NOTES_VALVE:
 				system("start https://developer.valvesoftware.com/wiki/Source_SDK_Release_Notes");
 				break;
 			case CALLBACKS::OPEN_SDK_DOCUMENTATION:
+				system("start https://github.com/kennyrkun/sourcedk/wiki");
+				break;
+			case CALLBACKS::OPEN_SDK_DOCUMENTATION_VALVE:
 				system("start https://developer.valvesoftware.com/wiki/Main_Page");
 				break;
 			};
