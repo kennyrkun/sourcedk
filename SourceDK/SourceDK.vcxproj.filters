@@ -13,6 +13,9 @@
     <ClCompile Include="Windows.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DisabledButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Windows.hpp">
@@ -22,6 +25,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="Engine.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DisabledButton.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

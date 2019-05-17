@@ -3,6 +3,8 @@
 #include <SFUI/SFUI.hpp>
 #include <SFUI/Theme.hpp>
 
+#include "DisabledButton.hpp"
+
 #include "Windows.hpp"
 #include "Games.hpp"
 #include "Engine.hpp"
@@ -488,6 +490,12 @@ enum CALLBACKS
 
 	OPEN_SDK_DOCUMENTATION,
 	OPEN_SDK_RELEASE_NOTES,
+	OPEN_SDK_RELEASE_NOTES_VALVE,
+
+	CREATE_A_MOD,
+	REFRESH_SDK_CONTENT,
+	RESET_GAME_CONFIGURATIONS,
+	EDIT_GAME_CONFIGURATIONS,
 
 	APPLICATION_SETTINGS,
 
@@ -499,20 +507,20 @@ void buildHomeInterface(SFUI::Menu& menu)
 	menu.setPosition(sf::Vector2f(borderWidth + 10, borderWidth + titlebarHeight + 8));
 
 	menu.addLabel("Applications");
-	menu.addButton("Hammer Editor", OPEN_HAMMER);
-	menu.addButton("Model Viewer", OPEN_MODEL_VIEWER);
-	menu.addButton("Face Poser", OPEN_FACE_POSER);
-	menu.addButton("itemtest", OPEN_ITEM_TEST);
+	menu.add(new DisabledButton("Hammer Editor"), OPEN_HAMMER);
+	menu.add(new DisabledButton("Model Viewer"), OPEN_MODEL_VIEWER);
+	menu.add(new DisabledButton("Face Poser"), OPEN_FACE_POSER);
+	menu.add(new DisabledButton("itemtest"), OPEN_ITEM_TEST);
 
 	menu.addLabel("Documentation");
 	menu.addButton("SDK Release Notes", OPEN_SDK_RELEASE_NOTES);
 	menu.addButton("SDK Documentation", OPEN_SDK_DOCUMENTATION);
 
 	menu.addLabel("Utilities");
-	menu.addButton("Create a Mod");
-	menu.addButton("Refresh SDK Content");
-	menu.addButton("Reset Game Configurations");
-	menu.addButton("Edit Game Configurations");
+	menu.add(new DisabledButton("Create a Mod"), CREATE_A_MOD);
+	menu.add(new DisabledButton("Refresh SDK Content"), REFRESH_SDK_CONTENT);
+	menu.add(new DisabledButton("Reset Game Configurations"), RESET_GAME_CONFIGURATIONS);
+	menu.add(new DisabledButton("Edit Game Configurations"), EDIT_GAME_CONFIGURATIONS);
 
 	menu.addHorizontalBoxLayout();
 	menu.addButton("Application Settings", APPLICATION_SETTINGS);
