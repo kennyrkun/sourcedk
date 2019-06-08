@@ -135,6 +135,7 @@
   <ItemGroup>
     <ClInclude Include="DisabledButton.hpp" />
     <ClInclude Include="Engine.hpp" />
+    <ClInclude Include="GameConfiguration.hpp" />
     <ClInclude Include="Games.hpp" />
     <ClInclude Include="Windows.hpp" />
   </ItemGroup>

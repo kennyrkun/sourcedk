@@ -30,5 +30,8 @@
     <ClInclude Include="DisabledButton.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="GameConfiguration.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

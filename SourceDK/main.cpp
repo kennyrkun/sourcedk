@@ -135,6 +135,12 @@ public:
 		bottomUpperBorder.setFillColor(WHITE_BORDER);
 		bottomLowerBorder.setFillColor(BLACK_BORDER);
 
+		resizerTexture.loadFromFile("resources/interface/resizer.png");
+		resizer.setSize(sf::Vector2f(resizerTexture.getSize().x, resizerTexture.getSize().x));
+		resizer.setTexture(&resizerTexture);
+		
+		resizer.setPosition(sf::Vector2f(window.getSize() - sf::Vector2u(borderWidth, borderWidth)));
+
 		title.setString(title_);
 		title.setFont(SFUI::Theme::getFont());
 		title.setCharacterSize(16);
@@ -176,6 +182,8 @@ public:
 	sf::RectangleShape bottomUpperBorder;
 	sf::RectangleShape bottomLowerBorder;
 
+	sf::RectangleShape resizer;
+
 	SFUI::Menu* closeMenu;
 
 	SFUI::SpriteButton* minimiseButton;
@@ -191,6 +199,8 @@ public:
 	sf::Texture minimiseButtonTexture;
 	sf::Texture maximiseButtonTexture;
 	sf::Texture closeButtonTexture;
+
+	sf::Texture resizerTexture;
 
 	bool isMaximised = false;
 
@@ -430,6 +440,8 @@ public:
 		window.draw(bottomUpperBorder);
 		window.draw(bottomLowerBorder);
 
+		window.draw(resizer);
+
 		window.draw(*closeMenu);
 	}
 
@@ -471,6 +483,8 @@ public:
 
 		bottomLowerBorder.setSize(sf::Vector2f(windowSize.x + (borderWidth * 2), 1));
 		bottomLowerBorder.setPosition(sf::Vector2f(0, windowSize.y - 1));
+
+		resizer.setPosition(sf::Vector2f(window.getSize().x - resizer.getSize().y - 4, window.getSize().y - resizer.getSize().y - 4));
 	}
 
 private:
@@ -544,7 +558,7 @@ void buildHomeInterface(SFUI::Menu& menu)
 //	SFUI::ComboBox<Engine>* engineVersion = new SFUI::ComboBox<Engine>(&window);
 	// We can't use ComboBox right now because SFUI isn't very great.
 	SFUI::OptionsBox<Engine>* engineVersion = new SFUI::OptionsBox<Engine>;
-	engineVersion->addItem("GoldSrc", Engine::Gold);
+	engineVersion->addItem("GoldSrc", Engine::GoldSource);
 	engineVersion->addItem("2003", Engine::Source2003);
 	engineVersion->addItem("2006", Engine::Source2006);
 	engineVersion->addItem("2007", Engine::Source2007);
@@ -651,9 +665,11 @@ int main()
 
 		window.draw(background);
 
-		decorations.Draw();
 
 		window.draw(menu);
+
+		// should always be the last thing that gets drawn
+		decorations.Draw();
 
 		window.display();
 	}

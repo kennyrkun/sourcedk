@@ -3,7 +3,7 @@
 
 enum Engine
 {
-	Gold,
+	GoldSource,
 	Source2003,
 	Source2006,
 	Source2007,
