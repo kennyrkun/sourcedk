@@ -121,19 +121,19 @@ public:
 
 		closeMenu->setPosition(sf::Vector2f(windowSize.x - closeMenu->getSize().x - borderWidth, borderWidth - 2));
 
-		titlebar.setFillColor(BORDER);
-		top.setFillColor(BORDER);
-		topUpper.setFillColor(WHITE_BORDER);
-		topLower.setFillColor(BLACK_BORDER);
-		left.setFillColor(BORDER);
-		leftLeftBorder.setFillColor(WHITE_BORDER);
-		leftRightBorder.setFillColor(BLACK_BORDER);
-		right.setFillColor(BORDER);
-		rightLeftBorder.setFillColor(WHITE_BORDER);
-		rightRightBorder.setFillColor(BLACK_BORDER);
-		bottom.setFillColor(BORDER);
-		bottomUpperBorder.setFillColor(WHITE_BORDER);
-		bottomLowerBorder.setFillColor(BLACK_BORDER);
+		titlebar.setFillColor(colors.BORDER);
+		top.setFillColor(colors.BORDER);
+		topUpper.setFillColor(colors.WHITE_BORDER);
+		topLower.setFillColor(colors.BLACK_BORDER);
+		left.setFillColor(colors.BORDER);
+		leftLeftBorder.setFillColor(colors.WHITE_BORDER);
+		leftRightBorder.setFillColor(colors.BLACK_BORDER);
+		right.setFillColor(colors.BORDER);
+		rightLeftBorder.setFillColor(colors.WHITE_BORDER);
+		rightRightBorder.setFillColor(colors.BLACK_BORDER);
+		bottom.setFillColor(colors.BORDER);
+		bottomUpperBorder.setFillColor(colors.WHITE_BORDER);
+		bottomLowerBorder.setFillColor(colors.BLACK_BORDER);
 
 		resizerTexture.loadFromFile("resources/interface/resizer.png");
 		resizer.setSize(sf::Vector2f(resizerTexture.getSize().x, resizerTexture.getSize().x));
@@ -190,11 +190,14 @@ public:
 	SFUI::SpriteButton* maximiseButton;
 	SFUI::SpriteButton* closeButton;
 
-	sf::Color WHITE_BORDER = sf::Color(136, 145, 128);
-	sf::Color BLACK_BORDER = sf::Color(40, 46, 34);
+	struct Colors
+	{
+		sf::Color WHITE_BORDER = sf::Color(136, 145, 128);
+		sf::Color BLACK_BORDER = sf::Color(40, 46, 34);
 
-	sf::Color WINDOW_BACKGROUND = sf::Color(62, 70, 55);
-	sf::Color BORDER = sf::Color(76, 88, 68);
+		sf::Color WINDOW_BACKGROUND = sf::Color(62, 70, 55);
+		sf::Color BORDER = sf::Color(76, 88, 68);
+	} colors;
 
 	sf::Texture minimiseButtonTexture;
 	sf::Texture maximiseButtonTexture;
@@ -604,10 +607,9 @@ int main()
 	SFUI::Theme::input.textColorFocus = sf::Color::White;
 	SFUI::Theme::PADDING = 2.f;
 
-#pragma region interface
 	WindowDecorations decorations;
 	sf::RenderWindow& window = decorations.createWindow();
-	SFUI::Theme::windowBgColor = decorations.WINDOW_BACKGROUND;
+	SFUI::Theme::windowBgColor = decorations.colors.WINDOW_BACKGROUND;
 
 	sf::RectangleShape lowerBorderExtension;
 	lowerBorderExtension.setSize(sf::Vector2f(decorations.windowSize.x - (borderWidth * 2), BOTTOM));
@@ -617,12 +619,11 @@ int main()
 	menu.setPosition(sf::Vector2f(borderWidth + 10, borderWidth + titlebarHeight + 8));
 
 	buildHomeInterface(menu);
-#pragma endregion
 
 	sf::RectangleShape background;
 	background.setSize(sf::Vector2f(window.getSize().x - decorations.right.getSize().x - decorations.left.getSize().x, 80 - decorations.bottom.getSize().y));
 	background.setPosition(sf::Vector2f(decorations.bottomUpperBorder.getPosition().x + 1, decorations.bottomUpperBorder.getPosition().y + 1));
-	background.setFillColor(decorations.BORDER);
+	background.setFillColor(decorations.colors.BORDER);
 
 	while (window.isOpen())
 	{
@@ -664,7 +665,6 @@ int main()
 		window.clear(SFUI::Theme::windowBgColor);
 
 		window.draw(background);
-
 
 		window.draw(menu);
 
