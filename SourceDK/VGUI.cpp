@@ -2,12 +2,16 @@
 
 VGUI::~VGUI()
 {
-	delete window;
-//	delete titleBarButtons;
+	// TODO: do not delete the window if we do not own it
+	if (weOwnWindow)
+		if (window != nullptr)
+			delete window;
 }
 
 sf::RenderWindow* VGUI::createWindow(const sf::Vector2f& size, const std::string& title_)
 {
+	weOwnWindow = true;
+
 	windowSize = size;
 	useableWindowSize = { windowSize.x - (sizes.left + sizes.right), windowSize.y - (sizes.top + sizes.bottom) - sizes.titlebar };
 
@@ -21,18 +25,24 @@ sf::RenderWindow* VGUI::createWindow(const sf::Vector2f& size, const std::string
 	return window;
 }
 
-sf::RenderWindow* VGUI::bindToWindow(sf::RenderWindow* window)
+sf::RenderWindow* VGUI::bindToWindow(sf::RenderWindow* window, const std::string& title)
 {
+	weOwnWindow = false;
+
 	this->window = window;
+	this->title.setString(title);
+
+	windowSize = sf::Vector2f(window->getSize());
+	useableWindowSize = { windowSize.x - (sizes.left + sizes.right), windowSize.y - (sizes.top + sizes.bottom) - sizes.titlebar };
 
 	initialise();
 
 	return this->window;
 }
 
-void VGUI::HandleEvent(const sf::Event& event)
+void VGUI::HandleEvents(const sf::Event& event)
 {
-	// TODO: don't run all the resizing code if the window is not resizable\
+	// TODO: don't run all the resizing code if the window is not resizable
 
 	sf::Vector2i mousePosition = sf::Mouse::getPosition();
 	sf::Vector2i mousePositionWindow = sf::Mouse::getPosition(*window);

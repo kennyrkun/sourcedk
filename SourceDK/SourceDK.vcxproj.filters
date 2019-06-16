@@ -5,6 +5,12 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="Source Files\AppEngine">
+      <UniqueIdentifier>{6a5b89dd-0f83-4f11-ab43-7bbe7b134632}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\States">
+      <UniqueIdentifier>{5e7005b0-52f9-45cd-b54f-c6cb76af3ce1}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files\Utility">
       <UniqueIdentifier>{8dfd7d73-9dcf-4701-8021-c11bfe5391d7}</UniqueIdentifier>
     </Filter>
@@ -22,12 +28,20 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="AppEngine.cpp">
+      <Filter>Source Files\AppEngine</Filter>
     </ClCompile>
     <ClCompile Include="DisabledButton.cpp">
       <Filter>Source Files\Utility</Filter>
     </ClCompile>
     <ClCompile Include="Windows.cpp">
       <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="MainMenuState.cpp">
+      <Filter>Source Files\States</Filter>
+    </ClCompile>
+    <ClCompile Include="AppSettings.hpp">
+      <Filter>Source Files\AppEngine</Filter>
     </ClCompile>
     <ClCompile Include="VGUI.cpp">
       <Filter>Source Files\Utility\VGUI</Filter>
@@ -37,7 +51,11 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AppState.hpp">
+      <Filter>Source Files\AppEngine</Filter>
     </ClInclude>
+    <ClInclude Include="AppEngine.hpp">
+      <Filter>Source Files\AppEngine</Filter>
     </ClInclude>
     <ClInclude Include="DisabledButton.hpp">
       <Filter>Source Files\Utility</Filter>

@@ -128,17 +128,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AppEngine.cpp" />
     <ClCompile Include="DisabledButton.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MainMenuState.cpp" />
+    <ClCompile Include="AppSettings.hpp" />
     <ClCompile Include="TitleBarButtons.cpp" />
     <ClCompile Include="VGUI.cpp" />
     <ClCompile Include="Windows.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AppEngine.hpp" />
+    <ClInclude Include="AppState.hpp" />
     <ClInclude Include="DisabledButton.hpp" />
     <ClInclude Include="Engine.hpp" />
     <ClInclude Include="GameConfiguration.hpp" />
     <ClInclude Include="Games.hpp" />
+    <ClInclude Include="MainMenuState.hpp" />
     <ClInclude Include="TitleBarButtons.hpp" />
     <ClInclude Include="VGUI.hpp" />
     <ClInclude Include="Windows.hpp" />

@@ -19,9 +19,9 @@ public:
 
 	~VGUI();
 
-	sf::RenderWindow* createWindow(const sf::Vector2f& size = { 310, 500 }, const std::string& title_ = "Source SDK");
+	sf::RenderWindow* createWindow(const sf::Vector2f& size = { 310, 500 }, const std::string& title = "");
 
-	sf::RenderWindow* bindToWindow(sf::RenderWindow* window);
+	sf::RenderWindow* bindToWindow(sf::RenderWindow* window, const std::string& title = "");
 
 	sf::RenderWindow* getWindow() { return window; }
 
@@ -90,7 +90,7 @@ public:
 
 	bool isMaximised = false;
 
-	void HandleEvent(const sf::Event& event);
+	void HandleEvents(const sf::Event& event);
 
 	void Draw();
 
@@ -98,6 +98,7 @@ public:
 
 private:
 	sf::RenderWindow* window;
+	bool weOwnWindow = false;
 
 	TitleBarButtons titleBarButton;
 
