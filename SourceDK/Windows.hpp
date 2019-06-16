@@ -1,3 +1,7 @@
+/////////////////////////////////////
+// This was designed just to avoid having Windows.h included in any files that needed these functions.
+/////////////////////////////////////
+
 #ifndef WINDOWS_HPP
 #define WINDOWS_HPP
 

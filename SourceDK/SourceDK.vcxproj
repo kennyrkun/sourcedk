@@ -130,6 +130,8 @@
   <ItemGroup>
     <ClCompile Include="DisabledButton.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="TitleBarButtons.cpp" />
+    <ClCompile Include="VGUI.cpp" />
     <ClCompile Include="Windows.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -137,6 +139,8 @@
     <ClInclude Include="Engine.hpp" />
     <ClInclude Include="GameConfiguration.hpp" />
     <ClInclude Include="Games.hpp" />
+    <ClInclude Include="TitleBarButtons.hpp" />
+    <ClInclude Include="VGUI.hpp" />
     <ClInclude Include="Windows.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

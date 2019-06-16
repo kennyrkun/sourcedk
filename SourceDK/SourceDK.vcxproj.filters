@@ -5,33 +5,63 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="Source Files\Utility">
+      <UniqueIdentifier>{8dfd7d73-9dcf-4701-8021-c11bfe5391d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utility\VGUI">
+      <UniqueIdentifier>{377b8871-737d-44bd-b9c8-dd33afa8583e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utility\VGUI\WindowDecorations">
+      <UniqueIdentifier>{04f67e17-33ea-41ad-864d-c66fd8929b24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utility\VGUI\WindowDecorations\TitleBarButtons">
+      <UniqueIdentifier>{12c02e6c-0023-4976-9c6b-a8b2d60b9381}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Windows.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DisabledButton.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows.cpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="VGUI.cpp">
+      <Filter>Source Files\Utility\VGUI</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleBarButtons.cpp">
+      <Filter>Source Files\Utility\VGUI\WindowDecorations\TitleBarButtons</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Windows.hpp">
-      <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Games.hpp">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Engine.hpp">
-      <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="DisabledButton.hpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.hpp">
+      <Filter>Source Files\Utility</Filter>
     </ClInclude>
     <ClInclude Include="GameConfiguration.hpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Games.hpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows.hpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenuState.hpp">
+      <Filter>Source Files\States</Filter>
+    </ClInclude>
+    <ClInclude Include="VGUI.hpp">
+      <Filter>Source Files\Utility\VGUI</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleBarButtons.hpp">
+      <Filter>Source Files\Utility\VGUI\WindowDecorations\TitleBarButtons</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
