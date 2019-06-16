@@ -42,7 +42,7 @@ void TitleBarButtons::build()
 	closeButton = new SFUI::SpriteButton(closeButtonTexture);
 	closehbox->add(closeButton, Callbacks::Closed);
 
-	closeMenu->setPosition(sf::Vector2f(interface->windowSize.x - closeMenu->getSize().x - interface->borderWidth, interface->borderWidth - 2));
+	closeMenu->setPosition(sf::Vector2f(interface->windowSize.x - closeMenu->getSize().x - interface->sizes.right, interface->sizes.top - 2.0f));
 	menuBounds = { closeMenu->getAbsolutePosition(), closeMenu->getSize() };
 }
 
@@ -82,5 +82,5 @@ void TitleBarButtons::onEvent(const sf::Event& event)
 
 void TitleBarButtons::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	target.draw(*closeMenu);
+	target.draw(*closeMenu, states);
 }

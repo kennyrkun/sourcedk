@@ -9,7 +9,7 @@ VGUI::~VGUI()
 sf::RenderWindow* VGUI::createWindow(const sf::Vector2f& size, const std::string& title_)
 {
 	windowSize = size;
-	useableWindowSize = { windowSize.x - (borderWidth * 2), windowSize.y - (borderWidth * 2) - titlebarHeight };
+	useableWindowSize = { windowSize.x - (sizes.left + sizes.right), windowSize.y - (sizes.top + sizes.bottom) - sizes.titlebar };
 
 	window = new sf::RenderWindow(sf::VideoMode(size.x, size.y), title_, sf::Style::None);
 	window->setVerticalSyncEnabled(true);
@@ -44,9 +44,8 @@ void VGUI::HandleEvent(const sf::Event& event)
 
 		updateWindowDecorations();
 
-		titleBarButton.closeMenu->setPosition(sf::Vector2f(windowSize.x - titleBarButton.closeMenu->getSize().x - borderWidth, borderWidth - 2));
+		titleBarButton.closeMenu->setPosition(sf::Vector2f(windowSize.x - titleBarButton.closeMenu->getSize().x - sizes.right, sizes.top - 2));
 		titleBarButton.menuBounds = { titleBarButton.closeMenu->getAbsolutePosition(), titleBarButton.closeMenu->getSize() };
-
 	}
 	else if (event.type == sf::Event::MouseButtonPressed)
 	{
@@ -246,42 +245,43 @@ void VGUI::Draw()
 
 void VGUI::updateWindowDecorations()
 {
-	title.setPosition(sf::Vector2f(borderWidth, (borderWidth / 2)));
+	title.setPosition(sf::Vector2f(sizes.left, (sizes.left / 2)));
 
-	titlebar.setSize(sf::Vector2f(windowSize.x - borderWidth * 2, titlebarHeight));
-	titlebar.setPosition(sf::Vector2f(borderWidth, borderWidth));
+	titlebar.setSize(sf::Vector2f(windowSize.x - (sizes.left + sizes.right), sizes.titlebar));
+	titlebar.setPosition(sf::Vector2f(sizes.left, sizes.top));
 
-	top.setSize(sf::Vector2f(windowSize.x, borderWidth));
+	top.setSize(sf::Vector2f(windowSize.x, sizes.top));
 
-	topUpper.setSize(sf::Vector2f(top.getSize().x, 1));
+	topUpper.setSize(sf::Vector2f(windowSize.x + ((sizes.left + sizes.right) + (sizes.leftOutline + sizes.rightOutline)), sizes.topOutline));
 
-	topLower.setSize(sf::Vector2f(windowSize.x - (borderWidth * 2), 1));
-	topLower.setPosition(sf::Vector2f(borderWidth, titlebarHeight + borderWidth - 1));
+	topLower.setSize(sf::Vector2f(windowSize.x - (sizes.left + sizes.right), sizes.topOutline));
+	topLower.setPosition(sf::Vector2f(sizes.left, sizes.top + sizes.titlebar - sizes.topOutline));
 
-	left.setSize(sf::Vector2f(borderWidth, windowSize.y));
+	left.setSize(sf::Vector2f(sizes.left, windowSize.y));
 
-	leftLeftBorder.setSize(sf::Vector2f(1, left.getSize().y));
+	leftLeftBorder.setSize(sf::Vector2f(sizes.leftOutline, left.getSize().y));
 
-	leftRightBorder.setSize(sf::Vector2f(1, left.getSize().y - BOTTOM - titlebarHeight - borderWidth + 1));
-	leftRightBorder.setPosition(sf::Vector2f(borderWidth - 1, titlebarHeight + borderWidth - 1));
+	leftRightBorder.setSize(sf::Vector2f(sizes.leftOutline, left.getSize().y - sizes.bottom- sizes.titlebar - sizes.left + sizes.leftOutline));
+	leftRightBorder.setPosition(sf::Vector2f(sizes.left - sizes.leftOutline, sizes.titlebar + sizes.left - sizes.leftOutline));
 
-	right.setSize(sf::Vector2f(borderWidth, windowSize.y));
-	right.setPosition(sf::Vector2f(windowSize.x - borderWidth, 0));
+	right.setSize(sf::Vector2f(sizes.right, windowSize.y));
+	right.setPosition(sf::Vector2f(windowSize.x - sizes.right, 0));
 
-	rightLeftBorder.setSize(sf::Vector2f(1, right.getSize().y - BOTTOM - titlebarHeight - borderWidth + 1));
-	rightLeftBorder.setPosition(sf::Vector2f(windowSize.x - borderWidth, titlebarHeight + borderWidth - 1));
+	rightLeftBorder.setSize(sf::Vector2f(sizes.rightOutline, right.getSize().y - sizes.bottom - sizes.titlebar - sizes.right + sizes.rightOutline));
+	rightLeftBorder.setPosition(sf::Vector2f(windowSize.x - sizes.right, sizes.titlebar + sizes.right - sizes.rightOutline));
 
-	rightRightBorder.setSize(sf::Vector2f(1, right.getSize().y));
-	rightRightBorder.setPosition(sf::Vector2f(windowSize.x - 1, 0));
+	rightRightBorder.setSize(sf::Vector2f(sizes.rightOutline, right.getSize().y));
+	rightRightBorder.setPosition(sf::Vector2f(windowSize.x - sizes.rightOutline, 0));
 
-	bottom.setSize(sf::Vector2f(windowSize.x + (borderWidth * 2), borderWidth));
-	bottom.setPosition(sf::Vector2f(0, windowSize.y - borderWidth));
+	bottom.setSize(sf::Vector2f(windowSize.x + (sizes.left + sizes.right), sizes.bottom));
+	bottom.setPosition(sf::Vector2f(0, windowSize.y - sizes.bottom));
 
-	bottomUpperBorder.setSize(sf::Vector2f(windowSize.x - (borderWidth * 2) + 2, 1));
-	bottomUpperBorder.setPosition(sf::Vector2f(borderWidth - 1, windowSize.y - BOTTOM));
+	// TODO: replace bottom with setting sizes.bottom to 80
+	bottomUpperBorder.setSize(sf::Vector2f(windowSize.x - (sizes.left + sizes.right) + (sizes.leftOutline + sizes.rightOutline), sizes.bottomOutline));
+	bottomUpperBorder.setPosition(sf::Vector2f(sizes.left - sizes.leftOutline, windowSize.y - sizes.bottom));
 
-	bottomLowerBorder.setSize(sf::Vector2f(windowSize.x + (borderWidth * 2), 1));
-	bottomLowerBorder.setPosition(sf::Vector2f(0, windowSize.y - 1));
+	bottomLowerBorder.setSize(sf::Vector2f(windowSize.x + ((sizes.left + sizes.right) + (sizes.leftOutline + sizes.rightOutline)), sizes.bottomOutline));
+	bottomLowerBorder.setPosition(sf::Vector2f(0, windowSize.y - sizes.bottomOutline));
 
 	resizer.setPosition(sf::Vector2f(window->getSize().x - resizer.getSize().y - 4, window->getSize().y - resizer.getSize().y - 4));
 }
@@ -306,7 +306,7 @@ void VGUI::initialise()
 	resizer.setSize(sf::Vector2f(resizerTexture.getSize().x, resizerTexture.getSize().x));
 	resizer.setTexture(&resizerTexture);
 
-	resizer.setPosition(sf::Vector2f(window->getSize() - sf::Vector2u(borderWidth, borderWidth)));
+	resizer.setPosition(sf::Vector2f(window->getSize() - sf::Vector2u(sizes.bottom, sizes.right)));
 
 	title.setFont(SFUI::Theme::getFont());
 	title.setCharacterSize(16);

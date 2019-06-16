@@ -32,7 +32,7 @@ enum CALLBACKS
 
 void buildHomeInterface(VGUI* interface, SFUI::Menu& menu)
 {
-	menu.setPosition(sf::Vector2f(interface->borderWidth + 10, interface->borderWidth + interface->titlebarHeight + 8));
+	menu.setPosition(sf::Vector2f(interface->sizes.left + 10, interface->sizes.top + interface->sizes.titlebar + 8));
 
 	// TODO: allow this to be customised with settings
 	menu.addLabel("Applications");
@@ -118,19 +118,23 @@ int main()
 	decorations.createWindow();
 	SFUI::Theme::windowBgColor = decorations.colors.windowBackground;
 
+	/*
 	sf::RectangleShape lowerBorderExtension;
 	lowerBorderExtension.setSize(sf::Vector2f(decorations.windowSize.x - (decorations.borderWidth * 2), decorations.BOTTOM));
 	lowerBorderExtension.setPosition(sf::Vector2f(decorations.borderWidth, decorations.windowSize.y - decorations.BOTTOM));
+	*/
 
 	SFUI::Menu menu(*decorations.getWindow());
-	menu.setPosition(sf::Vector2f(decorations.borderWidth + 10, decorations.borderWidth + decorations.titlebarHeight + 8));
+	menu.setPosition(sf::Vector2f(decorations.sizes.left + 10, decorations.sizes.top + decorations.sizes.titlebar + 8));
 
 	buildHomeInterface(&decorations, menu);
 
+	/*
 	sf::RectangleShape background;
 	background.setSize(sf::Vector2f(decorations.getWindow()->getSize().x - decorations.right.getSize().x - decorations.left.getSize().x, 80 - decorations.bottom.getSize().y));
 	background.setPosition(sf::Vector2f(decorations.bottomUpperBorder.getPosition().x + 1, decorations.bottomUpperBorder.getPosition().y + 1));
 	background.setFillColor(decorations.colors.border);
+	*/
 
 	while (decorations.getWindow()->isOpen())
 	{
@@ -147,8 +151,8 @@ int main()
 			}
 			else if (event.type == sf::Event::EventType::Resized)
 			{
-				background.setSize(sf::Vector2f(event.size.width - (decorations.borderWidth * 2), background.getSize().y));
-				background.setPosition(decorations.bottom.getPosition() - sf::Vector2f(-decorations.borderWidth, background.getSize().y));
+			//	background.setSize(sf::Vector2f(event.size.width - (decorations.borderWidth * 2), background.getSize().y));
+			//	background.setPosition(decorations.bottom.getPosition() - sf::Vector2f(-decorations.borderWidth, background.getSize().y));
 			}
 
 			int id = menu.onEvent(event);
@@ -171,7 +175,7 @@ int main()
 
 		decorations.getWindow()->clear(SFUI::Theme::windowBgColor);
 
-		decorations.getWindow()->draw(background);
+//		decorations.getWindow()->draw(background);
 
 		decorations.getWindow()->draw(menu);
 

@@ -9,13 +9,6 @@
 
 #include <string>
 
-// TODO: have sizes for each border
-// struct BorderSizes
-// Top
-// Left
-// Right
-// Bottom
-
 class VGUI
 {
 public:
@@ -32,9 +25,22 @@ public:
 
 	sf::RenderWindow* getWindow() { return window; }
 
-	const int borderWidth = 8;
-	const int titlebarHeight = 31 - borderWidth;
-	const int BOTTOM = 80;
+	struct BorderSizes
+	{
+		int top = 8;
+		int topOutline = 1;
+
+		int left = 8;
+		int leftOutline = 1;
+
+		int right = 8;
+		int rightOutline = 1;
+
+		int bottom = 8;
+		int bottomOutline = 1;
+
+		const int titlebar = 31 - top;
+	} sizes;
 
 	sf::Text title;
 
