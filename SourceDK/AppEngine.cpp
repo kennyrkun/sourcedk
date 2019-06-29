@@ -2,8 +2,10 @@
 #include "AppState.hpp"
 
 #include <SFUI/Theme.hpp>
+
 #include <iostream>
 #include <ctime>
+#include <experimental/filesystem>
 
 // TODO: load program icon
 
@@ -159,4 +161,13 @@ void AppEngine::Quit()
 	states.clear();
 
 	running = false;
+}
+
+std::vector<std::string> AppEngine::get_directories(const std::string& s)
+{
+	std::vector<std::string> r;
+	for (auto& p : std::experimental::filesystem::directory_iterator(s))
+		if (p.status().type() == std::experimental::filesystem::file_type::directory)
+			r.push_back(p.path().string().substr(s.length(), p.path().string().length()));
+	return r;
 }

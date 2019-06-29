@@ -50,6 +50,8 @@ public:
 
 	VGUI windowDecorations;
 
+	std::vector<std::string> get_directories(const std::string& s);
+
 private:
 	// the stack of states
 	std::vector<AppState*> states;
