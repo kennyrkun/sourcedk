@@ -1,16 +1,21 @@
 #include "MainMenuState.hpp"
+#include "ManageGameConfigurationState.hpp"
 
 #include "DisabledButton.hpp"
 #include "Windows.hpp"
 #include "Games.hpp"
 #include "Engine.hpp"
 #include "VGUI.hpp"
+#include "SettingsParser.hpp"
 
 #include <SFUI/SFUI.hpp>
 #include <SFUI/Theme.hpp>
 #include <SFML/Graphics.hpp>
 
 #include <iostream>
+#include <experimental/filesystem>
+
+namespace fs = std::experimental::filesystem;
 
 void MainMenuState::Init(AppEngine* appEngine)
 {
@@ -29,6 +34,9 @@ void MainMenuState::Init(AppEngine* appEngine)
 void MainMenuState::Cleanup()
 {
 	std::cout << "Cleaning up MainMenuState." << std::endl;
+
+	delete menu;
+
 	std::cout << "MainMenuState cleaned up." << std::endl;
 }
 
@@ -39,6 +47,18 @@ void MainMenuState::Pause()
 
 void MainMenuState::Resume()
 {
+	if (app->currentGameConfiguration != gameConfiguration->getSelectedValue())
+	{
+		std::cout << "game configuration has changed, reloading menu" << std::endl;
+
+		delete menu;
+
+		menu = new SFUI::Menu(*app->window);
+		menu->setPosition(sf::Vector2f(app->windowDecorations.sizes.left + 10, app->windowDecorations.sizes.top + app->windowDecorations.sizes.titlebar + 8));
+
+		buildHomeInterface(&app->windowDecorations, *menu);
+	}
+
 	std::cout << "MainMenuState resumed." << std::endl;
 }
 
@@ -55,6 +75,14 @@ void MainMenuState::HandleEvents()
 		int id = menu->onEvent(event);
 		switch (id)
 		{
+		case CALLBACKS::GAME_CONFIGURATION_CHANGE:
+		{
+			app->currentGameConfiguration = gameConfiguration->getSelectedValue();
+			break;
+		}
+		case CALLBACKS::EDIT_GAME_CONFIGURATIONS:
+			app->PushState(new ManageGameConfigurationState);
+			return;
 		case CALLBACKS::OPEN_SDK_RELEASE_NOTES:
 			system("start https://github.com/kennyrkun/sourcedk/releases");
 			break;
@@ -92,13 +120,31 @@ void MainMenuState::Draw()
 	app->window->display();
 }
 
+std::string getGameDirectory(std::string name)
+{
+	SettingsParser parser("./sourcedk/gameconfigurations/" + name + "/game.conf");
+
+	std::string directory;
+
+	parser.get("directory", directory);
+
+	return directory;
+}
+
 void MainMenuState::buildHomeInterface(VGUI* interface, SFUI::Menu& menu)
 {
 	menu.setPosition(sf::Vector2f(interface->sizes.left + 10, interface->sizes.top + interface->sizes.titlebar + 8));
 
 	// TODO: allow this to be customised with settings
 	menu.addLabel("Applications");
-	menu.add(new DisabledButton("Hammer Editor"), OPEN_HAMMER);
+
+	/*
+	if (fs::exists(getGameDirectory(app->currentGameConfiguration) + "/bin/Hammer.exe"))
+		menu.addButton("Hammer Editor", OPEN_HAMMER);
+	else
+	*/
+		menu.add(new DisabledButton("Hammer Editor"), OPEN_HAMMER);
+
 	menu.add(new DisabledButton("Model Viewer"), OPEN_MODEL_VIEWER);
 	menu.add(new DisabledButton("Face Poser"), OPEN_FACE_POSER);
 	menu.add(new DisabledButton("itemtest"), OPEN_ITEM_TEST);
@@ -115,7 +161,7 @@ void MainMenuState::buildHomeInterface(VGUI* interface, SFUI::Menu& menu)
 	menu.add(new DisabledButton("Create a Mod"), CREATE_A_MOD);
 	menu.add(new DisabledButton("Refresh SDK Content"), REFRESH_SDK_CONTENT);
 	menu.add(new DisabledButton("Reset Game Configurations"), RESET_GAME_CONFIGURATIONS);
-	menu.add(new DisabledButton("Edit Game Configurations"), EDIT_GAME_CONFIGURATIONS);
+	menu.addButton("Manage Game Configurations", EDIT_GAME_CONFIGURATIONS);
 
 	menu.addHorizontalBoxLayout();
 	menu.add(new DisabledButton("Application Settings"), APPLICATION_SETTINGS);
@@ -123,42 +169,21 @@ void MainMenuState::buildHomeInterface(VGUI* interface, SFUI::Menu& menu)
 	// padding
 	menu.addHorizontalBoxLayout();
 	menu.addHorizontalBoxLayout();
-	menu.addHorizontalBoxLayout();
 
-	SFUI::FormLayout* form2 = menu.addFormLayout();
-
-	//	SFUI::ComboBox<Engine>* engineVersion = new SFUI::ComboBox<Engine>(&window);
-		// We can't use ComboBox right now because SFUI isn't very great.
-	SFUI::OptionsBox<Engine>* engineVersion = new SFUI::OptionsBox<Engine>;
-	engineVersion->addItem("GoldSrc", Engine::GoldSource);
-	engineVersion->addItem("2003", Engine::Source2003);
-	engineVersion->addItem("2006", Engine::Source2006);
-	engineVersion->addItem("2007", Engine::Source2007);
-	engineVersion->addItem("2009", Engine::Source2009);
-	engineVersion->addItem("2013", Engine::Source2013);
-	engineVersion->addItem("Source2", Engine::Source2);
-	form2->addRow("Engine: ", engineVersion, 1336);
+	menu.addLabel("Current Game Configuration:");
 
 	//	SFUI::ComboBox<Game>* gameCombo = new SFUI::ComboBox<Game>(&window);
-	SFUI::OptionsBox<Game>* gameCombo = new SFUI::OptionsBox<Game>;
-	gameCombo->addItem("Counter-Strike: Global Offensive", Game::CSGO);
-	gameCombo->addItem("Counter-Strike: Source", Game::CSS);
-	gameCombo->addItem("Counter-Strike", Game::CS);
-	gameCombo->addItem("Half-Life", Game::HL);
-	gameCombo->addItem("Half-Life: Source", Game::HLS);
-	gameCombo->addItem("Half-Life: Opposing Force", Game::HLOS);
-	gameCombo->addItem("Half-Life: Blue Shift", Game::HLBS);
-	gameCombo->addItem("Half-Life: Deathmatch", Game::HLDM);
-	gameCombo->addItem("Half-Life: Deathmatch: Source", Game::HLDMS);
-	gameCombo->addItem("Half-Life 2", Game::HL2);
-	gameCombo->addItem("Half-Life 2: Episode 1", Game::HL2E1);
-	gameCombo->addItem("Half-Life 2: Episode 2", Game::HL2E2);
-	gameCombo->addItem("Half-Life 2: Lost Coast", Game::HL2LC);
-	gameCombo->addItem("Half-Life 2: Deathmatch", Game::HL2DM);
-	gameCombo->addItem("Dota 2", Game::DOTA2);
-	gameCombo->addItem("Team Fortress 2", Game::TF2);
-	gameCombo->addItem("Left 4 Dead", Game::L4D);
-	gameCombo->addItem("Left 4 Dead 2", Game::L4D2);
-	gameCombo->addItem("Ricochet", Game::RICOCHET);
-	form2->addRow("Game: ", gameCombo, 1337);
+	gameConfiguration = new SFUI::OptionsBox<std::string>;
+
+	auto gameList = app->get_directories("./sourcedk/gameconfigurations/");
+
+	for (size_t i = 0; i < gameList.size(); i++)
+	{
+		if (gameList[i] != app->currentGameConfiguration)
+			gameConfiguration->addItem(gameList[i], gameList[i]);
+	}
+
+	gameConfiguration->addItem(app->currentGameConfiguration, app->currentGameConfiguration);
+
+	menu.add(gameConfiguration, CALLBACKS::GAME_CONFIGURATION_CHANGE);
 }

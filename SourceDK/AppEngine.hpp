@@ -50,6 +50,11 @@ public:
 
 	VGUI windowDecorations;
 
+	// TODO: load this on startup
+	std::string currentGameConfiguration = "Half-Life 2";
+
+	std::map<std::string, std::string> sharedStateData;
+
 	std::vector<std::string> get_directories(const std::string& s);
 
 private:

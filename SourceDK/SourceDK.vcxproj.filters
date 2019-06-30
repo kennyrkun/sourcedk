@@ -49,6 +49,18 @@
     <ClCompile Include="TitleBarButtons.cpp">
       <Filter>Source Files\Utility\VGUI\WindowDecorations\TitleBarButtons</Filter>
     </ClCompile>
+    <ClCompile Include="MessageBox.cpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="ManageGameConfigurationState.cpp">
+      <Filter>Source Files\States</Filter>
+    </ClCompile>
+    <ClCompile Include="GameConfigurationEditState.cpp">
+      <Filter>Source Files\States</Filter>
+    </ClCompile>
+    <ClCompile Include="SettingsParser.cpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppState.hpp">
@@ -80,6 +92,18 @@
     </ClInclude>
     <ClInclude Include="TitleBarButtons.hpp">
       <Filter>Source Files\Utility\VGUI\WindowDecorations\TitleBarButtons</Filter>
+    </ClInclude>
+    <ClInclude Include="MessageBox.hpp">
+      <Filter>Source Files\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="ManageGameConfigurationState.hpp">
+      <Filter>Source Files\States</Filter>
+    </ClInclude>
+    <ClInclude Include="GameConfigurationEditState.hpp">
+      <Filter>Source Files\States</Filter>
+    </ClInclude>
+    <ClInclude Include="SettingsParser.hpp">
+      <Filter>Source Files\Utility</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

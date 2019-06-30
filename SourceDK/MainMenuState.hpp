@@ -4,7 +4,7 @@
 #include "AppState.hpp"
 
 #include "VGUI.hpp"
-#include <SFUI/Layouts/Menu.hpp>
+#include <SFUI/SFUI.hpp>
 
 class MainMenuState : public AppState
 {
@@ -23,6 +23,8 @@ private:
 	AppEngine* app;
 
 	SFUI::Menu* menu;
+
+	SFUI::OptionsBox<std::string>* gameConfiguration;
 
 	void buildHomeInterface(VGUI* interface, SFUI::Menu& menu);
 
@@ -45,6 +47,8 @@ private:
 		EDIT_GAME_CONFIGURATIONS,
 
 		APPLICATION_SETTINGS,
+
+		GAME_CONFIGURATION_CHANGE,
 
 		QUIT
 	};

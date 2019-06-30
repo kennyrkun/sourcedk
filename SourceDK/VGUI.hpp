@@ -9,6 +9,12 @@
 
 #include <string>
 
+// TODO: support for icon
+
+// modular extensions
+// TitleBarButtons will be an extension
+// addExtension(new TitleBarButtons);
+
 class VGUI
 {
 public:

@@ -130,9 +130,13 @@
   <ItemGroup>
     <ClCompile Include="AppEngine.cpp" />
     <ClCompile Include="DisabledButton.cpp" />
+    <ClCompile Include="GameConfigurationEditState.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenuState.cpp" />
     <ClCompile Include="AppSettings.hpp" />
+    <ClCompile Include="ManageGameConfigurationState.cpp" />
+    <ClCompile Include="MessageBox.cpp" />
+    <ClCompile Include="SettingsParser.cpp" />
     <ClCompile Include="TitleBarButtons.cpp" />
     <ClCompile Include="VGUI.cpp" />
     <ClCompile Include="Windows.cpp" />
@@ -143,8 +147,12 @@
     <ClInclude Include="DisabledButton.hpp" />
     <ClInclude Include="Engine.hpp" />
     <ClInclude Include="GameConfiguration.hpp" />
+    <ClInclude Include="GameConfigurationEditState.hpp" />
     <ClInclude Include="Games.hpp" />
     <ClInclude Include="MainMenuState.hpp" />
+    <ClInclude Include="ManageGameConfigurationState.hpp" />
+    <ClInclude Include="MessageBox.hpp" />
+    <ClInclude Include="SettingsParser.hpp" />
     <ClInclude Include="TitleBarButtons.hpp" />
     <ClInclude Include="VGUI.hpp" />
     <ClInclude Include="Windows.hpp" />

@@ -9,6 +9,8 @@
 class GameConfiguration
 {
 	std::string name;
+	
+	std::string path;
 
 	Engine engine;
 };
