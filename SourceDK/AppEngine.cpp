@@ -1,11 +1,16 @@
 #include "AppEngine.hpp"
 #include "AppState.hpp"
 
+#include "SettingsParser.hpp"
+
 #include <SFUI/Theme.hpp>
 
 #include <iostream>
 #include <ctime>
 #include <experimental/filesystem>
+#include <fstream>
+
+namespace fs = std::experimental::filesystem;
 
 // TODO: load program icon
 
@@ -24,6 +29,16 @@ void AppEngine::Init(std::string title_, AppSettings settings_)
 	multithreaded_process_indicator.setOrigin(sf::Vector2f(20, 20));
 //	SetMultiThreadedIndicatorIcon(GBL::theme.getTexture("settings_2x.png")); // eventually this needs to be done in IntialiseState, but right now it refuses to work there.
 
+	if (fs::exists("./sourcedk/sourcedk.conf"))
+	{
+		SettingsParser parser("./sourcedk/sourcedk.conf");
+		parser.get("currentGameConfiguration", currentGameConfiguration);
+	}
+	else
+	{
+		std::ofstream createFile("./sourcedk/sourcedk.conf", std::ios::app);
+	}
+
 	running = true;
 }
 
@@ -36,6 +51,12 @@ void AppEngine::Cleanup()
 
 	window->close();
 	delete window;
+
+	if (!fs::exists("./sourcedk/sourcedk.conf"))
+		std::ofstream createFile("./sourcedk/sourcedk.conf", std::ios::app);
+
+	SettingsParser parser("./sourcedk/sourcedk.conf");
+	parser.set("currentGameConfiguration", currentGameConfiguration);
 
 	running = false;
 
@@ -166,8 +187,8 @@ void AppEngine::Quit()
 std::vector<std::string> AppEngine::get_directories(const std::string& s)
 {
 	std::vector<std::string> r;
-	for (auto& p : std::experimental::filesystem::directory_iterator(s))
-		if (p.status().type() == std::experimental::filesystem::file_type::directory)
+	for (auto& p : fs::directory_iterator(s))
+		if (p.status().type() == fs::file_type::directory)
 			r.push_back(p.path().string().substr(s.length(), p.path().string().length()));
 	return r;
 }
