@@ -7,6 +7,7 @@
 #include "Engine.hpp"
 #include "VGUI.hpp"
 #include "SettingsParser.hpp"
+#include "MessageBox.hpp"
 
 #include <SFUI/SFUI.hpp>
 #include <SFUI/Theme.hpp>
@@ -75,6 +76,38 @@ void MainMenuState::HandleEvents()
 		int id = menu->onEvent(event);
 		switch (id)
 		{
+		case CALLBACKS::RESET_GAME_CONFIGURATIONS:
+		{
+			MessageBox::Options mbo = { "Confirmation", "Are you sure you want to reset all configurations?\n\nYou will have to manually recreate them all.", { "Yes", "No" } };
+
+			MessageBox mb(mbo);
+			mb.runBlocking();
+
+			switch (mb.exitCode) // 0 is yes, 1 is no
+			{
+			case 1:
+				break;
+			case 0:
+				try
+				{
+					fs::remove_all("./sourcedk/gameconfigurations/");
+				}
+				catch (std::exception &e)
+				{
+					std::cerr << "failed to delete all configurations" << std::endl;
+					std::cerr << e.what() << std::endl;
+				}
+
+				delete menu;
+
+				menu = new SFUI::Menu(*app->window);
+				menu->setPosition(sf::Vector2f(app->windowDecorations.sizes.left + 10, app->windowDecorations.sizes.top + app->windowDecorations.sizes.titlebar + 8));
+
+				buildHomeInterface(&app->windowDecorations, *menu);
+			}
+
+			break;
+		}
 		case CALLBACKS::GAME_CONFIGURATION_CHANGE:
 		{
 			app->currentGameConfiguration = gameConfiguration->getSelectedValue();
@@ -160,7 +193,7 @@ void MainMenuState::buildHomeInterface(VGUI* interface, SFUI::Menu& menu)
 	menu.addLabel("Utilities");
 	menu.add(new DisabledButton("Create a Mod"), CREATE_A_MOD);
 	menu.add(new DisabledButton("Refresh SDK Content"), REFRESH_SDK_CONTENT);
-	menu.add(new DisabledButton("Reset Game Configurations"), RESET_GAME_CONFIGURATIONS);
+	menu.addButton("Reset Game Configurations", RESET_GAME_CONFIGURATIONS);
 	menu.addButton("Manage Game Configurations", EDIT_GAME_CONFIGURATIONS);
 
 	menu.addHorizontalBoxLayout();
