@@ -68,6 +68,9 @@ void ManageGameConfigurationState::HandleEvents()
 		int id = menu->onEvent(event);
 		switch (id)
 		{
+		case CALLBACKS::GAME_CONFIGURATION_CHANGE:
+			app->currentGameConfiguration = configurationSelector->getSelectedValue();
+			break;
 		case CALLBACKS::OK:
 		{
 			app->currentGameConfiguration = configurationSelector->getSelectedValue();
@@ -84,7 +87,7 @@ void ManageGameConfigurationState::HandleEvents()
 		case CALLBACKS::EDIT:
 		{
 			app->sharedStateData.clear();
-			app->sharedStateData.emplace("gameName", app->currentGameConfiguration);
+			app->sharedStateData.emplace("gameName", configurationSelector->getSelectedValue());
 
 			app->PushState(new GameConfigurationEditState);
 			return;
@@ -102,7 +105,7 @@ void ManageGameConfigurationState::HandleEvents()
 				break;
 			case 0:
 				// TODO: delete the config
-				fs::remove_all("./sourcedk/gameconfigurations/" + app->currentGameConfiguration);
+				fs::remove_all("./sourcedk/gameconfigurations/" + configurationSelector->getSelectedValue());
 				delete menu;
 				menu = new SFUI::Menu(*window);
 				buildHomeInterface(&app->windowDecorations, *menu);
