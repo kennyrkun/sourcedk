@@ -9,6 +9,17 @@ DisabledButton::DisabledButton(const sf::String& string)
 	m_box.setSize(SFUI::Theme::minWidgetWidth, SFUI::Theme::getBoxHeight());
 	setString(string);
 	setSize(m_box.getSize());
+
+	hoverText.setFont(SFUI::Theme::getFont());
+	hoverText.setCharacterSize(12);
+	hoverText.setFillColor(SFUI::Theme::click.textColor);
+	hoverText.setString("Not yet available.");
+
+	hoverBox.setSize(sf::Vector2f(hoverText.getGlobalBounds().width + 10, hoverText.getGlobalBounds().height + 10));
+	hoverBox.setFillColor(sf::Color(46, 51, 40));
+
+	hoverBox.setPosition(0, -42);
+	hoverText.setPosition(4, -38);
 }
 
 void DisabledButton::setString(const sf::String& string)
@@ -40,6 +51,22 @@ void DisabledButton::draw(sf::RenderTarget& target, sf::RenderStates states) con
 		sf::RectangleShape s(m_box.getSize());
 		s.setFillColor(sf::Color(70, 80, 60, 150));
 		target.draw(s, states);
+
+		if (hovered)
+		{
+			target.draw(hoverBox, states);
+
+			sf::ConvexShape shape;
+			shape.setPointCount(3);
+			shape.setPoint(0, sf::Vector2f(0, 0));
+			shape.setPoint(1, sf::Vector2f(20, 0));
+			shape.setPoint(2, sf::Vector2f(10, 15));
+			shape.setPosition((m_box.getSize().x / 2) - (shape.getGlobalBounds().width / 2), -20);
+			shape.setFillColor(sf::Color(46, 51, 40));
+			target.draw(shape, states);
+
+			target.draw(hoverText, states);
+		}
 	}
 }
 
@@ -48,7 +75,14 @@ void DisabledButton::draw(sf::RenderTarget& target, sf::RenderStates states) con
 void DisabledButton::onStateChanged(SFUI::State state)
 {
 	if (disabled)
+	{
+		if (state == SFUI::State::Hovered)
+			hovered = true;
+		else
+			hovered = false;
+
 		return;
+	}
 
 	m_box.applyState(state);
 }

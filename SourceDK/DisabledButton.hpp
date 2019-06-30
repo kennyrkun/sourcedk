@@ -37,6 +37,11 @@ private:
 	SFUI::ItemBox<sf::Text> m_box;
 
 	bool disabled = true;
+
+	bool hovered = false;
+
+	sf::RectangleShape hoverBox;
+	sf::Text hoverText;
 };
 
 #endif // !SFUI_BUTTON_HPP
