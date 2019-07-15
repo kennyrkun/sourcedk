@@ -9,12 +9,13 @@ int main()
 	SFUI::Theme::loadFont("resources/interface/tahoma.ttf");
 	SFUI::Theme::loadTexture("resources/interface/vgui.png");
 	SFUI::Theme::textCharacterSize = 11;
-	SFUI::Theme::click.textColor = sf::Color::White;
-	SFUI::Theme::click.textColorHover = sf::Color::White;
-	SFUI::Theme::click.textColorFocus = sf::Color::White;
-	SFUI::Theme::input.textColor = sf::Color::White;
-	SFUI::Theme::input.textColorHover = sf::Color::White;
-	SFUI::Theme::input.textColorFocus = sf::Color::White;
+
+	sf::Color white = sf::Color::White;
+	SFUI::Theme::click = { white, white, white };
+	SFUI::Theme::input = { white, white, white };
+	SFUI::Theme::label = { white, white, white };
+//	SFUI::Theme::label.textColor = sf::Color(210, 190, 86);
+
 	SFUI::Theme::PADDING = 2.f;
 
 	AppSettings settings;
